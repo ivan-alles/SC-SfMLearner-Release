@@ -53,6 +53,21 @@ def tensor2array(tensor, max_value=None, colormap='rainbow'):
         array = 0.45 + tensor.numpy()*0.225
     return array
 
+def tensor2array2(tensor, colormap='rainbow'):
+    tensor = tensor.detach().cpu()
+    max = tensor.max()
+    min = tensor.min()
+    tensor = (tensor - min) / (max - min)
+    if tensor.ndimension() == 2 or tensor.size(0) == 1:
+        norm_array = tensor.squeeze().numpy()
+        array = COLORMAPS[colormap](norm_array).astype(np.float32)
+        array = array.transpose(2, 0, 1)
+
+    elif tensor.ndimension() == 3:
+        assert(tensor.size(0) == 3)
+        array = 0.45 + tensor.numpy()*0.225
+    return array
+
 
 def save_checkpoint(save_path, dispnet_state, exp_pose_state, is_best, filename='checkpoint.pth.tar'):
     file_prefixes = ['dispnet', 'exp_pose']

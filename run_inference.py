@@ -1,14 +1,14 @@
 import torch
 
 from imageio import imread, imsave
-from scipy.misc import imresize
+# from scipy.misc import imresize
 import numpy as np
 from path import Path
 import argparse
 from tqdm import tqdm
 
 from models import DispResNet
-from utils import tensor2array
+from utils import tensor2array, tensor2array2
 
 parser = argparse.ArgumentParser(description='Inference script for DispNet learned with \
                                  Structure from Motion Learner inference on KITTI Dataset',
@@ -76,7 +76,8 @@ def main():
             imsave(output_dir/'{}_disp{}'.format(file_name, file_ext), np.transpose(disp, (1, 2, 0)))
         if args.output_depth:
             depth = 1/output
-            depth = (255*tensor2array(depth, max_value=10, colormap='rainbow')).astype(np.uint8)
+            # depth = (255*tensor2array(depth, max_value=10, colormap='rainbow')).astype(np.uint8)
+            depth = (255*tensor2array2(depth, colormap='rainbow')).astype(np.uint8)
             imsave(output_dir/'{}_depth{}'.format(file_name, file_ext), np.transpose(depth, (1, 2, 0)))
 
 
